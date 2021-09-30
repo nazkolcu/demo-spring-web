@@ -33,6 +33,7 @@ public class CustomerServiceImpl implements CustomerService{
     public Customer update(CustomerDto customerDto, Long id) {
         return repository.findById(id)
                 .map(customer -> {
+                    customer.setId(id);
                     customer.setName(customer.getName());
                     customer.setEmail(customer.getEmail());
                     return repository.save(customer);

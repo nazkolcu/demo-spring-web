@@ -21,8 +21,6 @@ import reactor.core.publisher.Mono;
 @RequestMapping("v1/customer")
 public class CustomerController {
 
-
-
     @Autowired
     private CustomerService service;
 
@@ -40,21 +38,23 @@ public class CustomerController {
     public ResponseEntity replaceEmployee(@RequestBody CustomerDto customerDto, @PathVariable Long id) {
 
         service.update(customerDto, id);
-        return ResponseEntity.ok("Musteri basariyla guncellendi!");
+        return ResponseEntity.ok("The customer has been successfully updated!");
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity createCustomerSendEmail(@RequestBody CustomerDto request) {
 
+        Customer customer = service.create(request);
+
         WebClient client = WebClient.create("http://localhost:8092");
         MyResponse sendEmail = client.post()
                 .uri("/api/sendemail")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(Mono.just(request), CustomerDto.class)
+                .body(Mono.just(customer.toCustomerDto()), CustomerDto.class)
                 .retrieve()
                 .bodyToMono(MyResponse.class).block();
 
-        return ResponseEntity.ok("Musteri basariyla yaratildi ve " + sendEmail);
+        return ResponseEntity.ok("The customer has been successfully created and " + sendEmail.getResult());
 
     }
 }

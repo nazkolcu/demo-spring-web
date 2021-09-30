@@ -41,7 +41,7 @@ public class CustomerController2 {
     public ResponseEntity replaceEmployee(@RequestBody CustomerDto customerDto, @PathVariable Long id) {
 
         service.update(customerDto, id);
-        return ResponseEntity.ok("Musteri basariyla guncellendi!");
+        return ResponseEntity.ok("The customer has been successfully updated!");
     }
 
 
@@ -55,6 +55,6 @@ public class CustomerController2 {
         rabbitTemplate.convertAndSend("EVENTMESSAGE.EXCHANGE", "DEMO.QUEUE", rmqmessage);
 
 
-        return ResponseEntity.ok("Musteri basariyla yaratildi!");
+        return ResponseEntity.ok("The customer has been successfully created!");
     }
 }
