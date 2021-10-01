@@ -1,12 +1,11 @@
 package com.ing.demospringweb.service;
 
+import com.ing.demospringweb.exception.CustomerNotFoundException;
 import com.ing.demospringweb.model.Customer;
 import com.ing.demospringweb.model.dto.CustomerDto;
 import com.ing.demospringweb.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class CustomerServiceImpl implements CustomerService{
@@ -20,28 +19,24 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
-    public Optional<Customer> findById(Long id) {
-        return repository.findById(id);
+    public Customer findById(Long id) {
+        return repository.findById(id).orElseThrow(()->new CustomerNotFoundException(id));
     }
 
     @Override
     public void deleteById(Long id) {
-        repository.deleteById(id);
+        //repository.deleteById(id);
+    Customer customer=findById(id);
+    repository.deleteById(customer.getId());
     }
 
     @Override
     public Customer update(CustomerDto customerDto, Long id) {
-        return repository.findById(id)
-                .map(customer -> {
-                    customer.setId(id);
-                    customer.setName(customer.getName());
-                    customer.setEmail(customer.getEmail());
-                    return repository.save(customer);
-                })
-                .orElseGet(() -> {
-                    customerDto.setId(id);
-                    return repository.save(customerDto.toCustomer());
-                });
+        Customer customer=findById(id);
+        customer.setEmail(customerDto.getEmail());
+        customer.setName(customerDto.getName());
+     return create(customer.toCustomerDto());
+
     }
 
 }
