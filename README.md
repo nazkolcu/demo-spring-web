@@ -7,3 +7,5 @@ Projenin Mail servisine ulaşmak için [tıklayınız](https://github.com/nazkol
 demo-spring-web servisinde kaydolan müşteriye, demo-spring-mail servisinden rabbitmq veya webclient aracılığıyla ulaştırılan bilgilerle mail atılması.
 
 Mail içeriği; ING logo ve müşterinin ismini içeren kişiselleştirilmiş bir hoş geldin resmidir. 
+
+![Mail Example](images/mailExample.jpg)
